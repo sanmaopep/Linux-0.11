@@ -143,6 +143,7 @@ void schedule(void)
 
 int sys_pause(void)
 {
+    // ???->就绪态
 	current->state = TASK_INTERRUPTIBLE;
 	schedule();
 	return 0;
@@ -158,6 +159,7 @@ void sleep_on(struct task_struct **p)
 		panic("task[0] trying to sleep");
 	tmp = *p;
 	*p = current;
+	// ???->阻塞态
 	current->state = TASK_UNINTERRUPTIBLE;
 	schedule();
 	if (tmp)
@@ -188,6 +190,7 @@ repeat:	current->state = TASK_INTERRUPTIBLE;
 void wake_up(struct task_struct **p)
 {
 	if (p && *p) {
+	    // ???->运行态
 		(**p).state=0;
 		*p=NULL;
 	}
